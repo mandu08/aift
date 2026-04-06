@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>마이페이지</h1>
+    <p>안녕하세요, <%= user %>님!</p>
+    <a href="/write">글 작성하기</a> | <a href="/">메인으로</a>
+    <hr>
+    <h3>내가 쓴 글 목록</h3>
+    <ul>
+        <% posts.forEach(post => { %>
+            <li>
+                <a href="/post/<%= post.id %>"><%= post.title %></a> 
+                (<a href="/edit/<%= post.id %>">수정</a>)
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>

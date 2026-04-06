@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>글 수정</h1>
+    <form action="/edit/<%= post.id %>" method="POST">
+        <input type="text" name="title" value="<%= post.title %>" required><br>
+        <textarea name="content" required><%= post.content %></textarea><br>
+        <button type="submit">수정 완료</button>
+    </form>
+    <a href="/mypage">취소</a>
+</body>
+</html>

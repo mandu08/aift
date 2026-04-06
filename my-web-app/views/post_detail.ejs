@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1><%= post.title %></h1>
+    <p>작성자: <%= post.username %> | 작성일: <%= post.created_at %></p>
+    <div style="border: 1px solid #ccc; padding: 20px;"><%= post.content %></div>
+    
+    <form action="/post/<%= post.id %>/like" method="POST">
+        <button type="submit">좋아요 (<%= likeCount %>)</button>
+    </form>
+    
+    <hr>
+    <h3>댓글</h3>
+    <% if (user) { %>
+        <form action="/post/<%= post.id %>/comment" method="POST">
+            <textarea name="content" placeholder="댓글을 입력하세요" required></textarea>
+            <button type="submit">댓글 등록</button>
+        </form>
+    <% } %>
+    
+    <ul>
+        <% comments.forEach(comment => { %>
+            <li><strong><%= comment.username %></strong>: <%= comment.content %></li>
+        <% }) %>
+    </ul>
+    
+    <a href="/">목록으로</a>
+</body>
+</html>

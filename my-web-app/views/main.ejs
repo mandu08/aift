@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>메인 페이지</title>
+</head>
+<body>
+    <h1>게시판</h1>
+    <% if (user) { %>
+        <p><%= user %>님 환영합니다! <a href="/logout">로그아웃</a> | <a href="/mypage">마이페이지</a></p>
+    <% } else { %>
+        <p><a href="/login">로그인</a> | <a href="/signup">회원가입</a></p>
+    <% } %>
+    <hr>
+    <ul>
+        <% posts.forEach(post => { %>
+            <li>
+                <a href="/post/<%= post.id %>"><%= post.title %></a> 
+                (작성자: <%= post.username %>)
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>
