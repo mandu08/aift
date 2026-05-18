@@ -1,23 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>메인 페이지</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Blog - 메인</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>게시판</h1>
-    <% if (user) { %>
-        <p><%= user %>님 환영합니다! <a href="/logout">로그아웃</a> | <a href="/mypage">마이페이지</a></p>
-    <% } else { %>
-        <p><a href="/login">로그인</a> | <a href="/signup">회원가입</a></p>
-    <% } %>
-    <hr>
-    <ul>
-        <% posts.forEach(post => { %>
-            <li>
-                <a href="/post/<%= post.id %>"><%= post.title %></a> 
-                (작성자: <%= post.username %>)
-            </li>
-        <% }) %>
-    </ul>
+    <div class="container">
+        <header>
+            <a href="/" class="logo">Neon Blog</a>
+            <nav>
+                <% if (user) { %>
+                    <span class="post-meta"><%= user %>님</span>
+                    <a href="/mypage">마이페이지</a>
+                    <a href="/logout">로그아웃</a>
+                    <a href="/write" class="btn btn-primary" style="margin-left: 10px;">글쓰기</a>
+                <% } else { %>
+                    <a href="/login">로그인</a>
+                    <a href="/signup">회원가입</a>
+                <% } %>
+            </nav>
+        </header>
+
+        <main>
+            <h1 style="margin-bottom: 30px; color: var(--neon-purple);">최신 게시글</h1>
+            
+            <% if (posts.length === 0) { %>
+                <p style="text-align: center; color: var(--text-secondary); margin-top: 50px;">아직 작성된 글이 없습니다.</p>
+            <% } %>
+
+            <% posts.forEach(post => { %>
+                <article class="post-card">
+                    <h2><a href="/post/<%= post.id %>"><%= post.title %></a></h2>
+                    <div class="post-meta">
+                        <span>작성자: <span style="color: var(--neon-blue);"><%= post.username %></span></span>
+                        <span style="margin: 0 10px;">|</span>
+                        <span><%= new Date(post.created_at).toLocaleDateString() %></span>
+                    </div>
+                </article>
+            <% }) %>
+        </main>
+    </div>
 </body>
 </html>
