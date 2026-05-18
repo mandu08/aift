@@ -32,8 +32,11 @@
                             <h3 style="margin: 0;"><a href="/post/<%= post.id %>" style="color: var(--text-primary); text-decoration: none;"><%= post.title %></a></h3>
                             <span class="post-meta"><%= new Date(post.created_at).toLocaleDateString() %></span>
                         </div>
-                        <div>
+                        <div style="display: flex; gap: 10px;">
                             <a href="/edit/<%= post.id %>" class="btn btn-outline" style="padding: 5px 12px; font-size: 0.85rem; border-color: var(--neon-purple); color: var(--neon-purple);">수정</a>
+                            <form action="/post/<%= post.id %>/delete" method="POST" onsubmit="return confirm('정말 삭제하시겠습니까?')">
+                                <button type="submit" class="btn btn-outline" style="padding: 5px 12px; font-size: 0.85rem; border-color: var(--neon-pink); color: var(--neon-pink);">삭제</button>
+                            </form>
                         </div>
                     </div>
                 <% }) %>

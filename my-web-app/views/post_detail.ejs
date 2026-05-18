@@ -37,6 +37,12 @@
                         ❤ 좋아요 <%= likeCount %>
                     </button>
                 </form>
+                <% if (user && user === post.username) { %>
+                    <a href="/edit/<%= post.id %>" class="btn btn-outline" style="color: var(--neon-purple); border-color: var(--neon-purple);">수정</a>
+                    <form action="/post/<%= post.id %>/delete" method="POST" onsubmit="return confirm('정말 삭제하시겠습니까?')">
+                        <button type="submit" class="btn btn-outline" style="color: var(--neon-pink); border-color: var(--neon-pink);">삭제</button>
+                    </form>
+                <% } %>
                 <a href="/" class="btn btn-outline">목록으로</a>
             </div>
         </article>
@@ -60,9 +66,16 @@
             <div class="comments-list">
                 <% comments.forEach(comment => { %>
                     <div class="comment">
-                        <div class="post-meta" style="margin-bottom: 8px;">
-                            <strong style="color: var(--neon-blue);"><%= comment.username %></strong>
-                            <span style="margin-left: 10px; font-size: 0.8rem;"><%= new Date(comment.created_at).toLocaleString() %></span>
+                        <div class="post-meta" style="margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong style="color: var(--neon-blue);"><%= comment.username %></strong>
+                                <span style="margin-left: 10px; font-size: 0.8rem;"><%= new Date(comment.created_at).toLocaleString() %></span>
+                            </div>
+                            <% if (user && user === comment.username) { %>
+                                <form action="/comment/<%= comment.id %>/delete" method="POST" onsubmit="return confirm('댓글을 삭제하시겠습니까?')">
+                                    <button type="submit" style="background: none; border: none; color: var(--neon-pink); cursor: pointer; font-size: 0.8rem;">삭제</button>
+                                </form>
+                            <% } %>
                         </div>
                         <div style="color: var(--text-primary);"><%= comment.content %></div>
                     </div>

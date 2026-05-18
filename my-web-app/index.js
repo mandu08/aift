@@ -99,6 +99,36 @@ app.post('/post/:id/like', checkAuth, async (req, res) => {
     res.redirect(`/post/${req.params.id}`);
 });
 
+// 댓글 삭제
+app.post('/comment/:id/delete', checkAuth, async (req, res) => {
+    const commentId = req.params.id;
+    const comment = await pool.query('SELECT * FROM comments WHERE id = $1', [commentId]);
+    
+    if (comment.rows[0] && comment.rows[0].author_id === req.session.userId) {
+        await pool.query('DELETE FROM comments WHERE id = $1', [commentId]);
+        res.redirect(`/post/${comment.rows[0].post_id}`);
+    } else {
+        res.send("삭제 권한이 없습니다.");
+    }
+});
+
+// 글 삭제
+app.post('/post/:id/delete', checkAuth, async (req, res) => {
+    const postId = req.params.id;
+    const post = await pool.query('SELECT * FROM posts WHERE id = $1', [postId]);
+    
+    if (post.rows[0] && post.rows[0].author_id === req.session.userId) {
+        // 관련된 좋아요와 댓글을 먼저 삭제해야 할 수도 있음 (DB 제약 조건에 따라)
+        // 여기서는 간단하게 post만 삭제 (ON DELETE CASCADE가 설정되어 있다고 가정하거나 수동 삭제)
+        await pool.query('DELETE FROM likes WHERE post_id = $1', [postId]);
+        await pool.query('DELETE FROM comments WHERE post_id = $1', [postId]);
+        await pool.query('DELETE FROM posts WHERE id = $1', [postId]);
+        res.redirect('/');
+    } else {
+        res.send("삭제 권한이 없습니다.");
+    }
+});
+
 // 4. 마이 페이지
 app.get('/mypage', checkAuth, async (req, res) => {
     const myPosts = await pool.query('SELECT * FROM posts WHERE author_id = $1', [req.session.userId]);
