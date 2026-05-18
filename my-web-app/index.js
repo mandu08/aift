@@ -28,8 +28,23 @@ const checkAuth = (req, res, next) => {
 // 1. 메인 페이지 - 글 목록
 app.get('/', async (req, res) => {
     try {
-        const result = await pool.query('SELECT posts.*, users.username FROM posts JOIN users ON posts.author_id = users.id ORDER BY created_at DESC');
-        res.render('main', { posts: result.rows, user: req.session.user });
+        const postsResult = await pool.query('SELECT posts.*, users.username FROM posts JOIN users ON posts.author_id = users.id ORDER BY created_at DESC');
+        
+        // 인기글 5개 가져오기 (좋아요 순)
+        const popularResult = await pool.query(`
+            SELECT posts.id, posts.title, COUNT(likes.id) as like_count 
+            FROM posts 
+            LEFT JOIN likes ON posts.id = likes.post_id 
+            GROUP BY posts.id 
+            ORDER BY like_count DESC, created_at DESC 
+            LIMIT 5
+        `);
+
+        res.render('main', { 
+            posts: postsResult.rows, 
+            popularPosts: popularResult.rows,
+            user: req.session.user 
+        });
     } catch (err) {
         console.error(err);
         res.send("데이터베이스 연결 오류");

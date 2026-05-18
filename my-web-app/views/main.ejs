@@ -24,7 +24,28 @@
         </header>
 
         <main>
-            <h1 style="margin-bottom: 30px; color: var(--neon-purple);">최신 게시글</h1>
+            <!-- 인기글 섹션 -->
+            <section style="margin-bottom: 50px;">
+                <h2 style="color: var(--neon-pink); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                    <span>🔥 인기 게시글 (TOP 5)</span>
+                </h2>
+                <div style="background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px;">
+                    <% if (popularPosts.length === 0) { %>
+                        <p style="padding: 15px; color: var(--text-secondary); text-align: center;">아직 인기글이 없습니다.</p>
+                    <% } %>
+                    <% popularPosts.forEach((post, index) => { %>
+                        <div style="padding: 12px 15px; border-bottom: <%= index === popularPosts.length - 1 ? 'none' : '1px solid var(--border-color)' %>; display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <span style="color: var(--neon-pink); font-weight: bold; font-size: 1.1rem; min-width: 25px;"><%= index + 1 %></span>
+                                <a href="/post/<%= post.id %>" style="color: var(--text-primary); text-decoration: none; font-weight: 500;"><%= post.title %></a>
+                            </div>
+                            <span style="color: var(--text-secondary); font-size: 0.85rem;">❤ <%= post.like_count %></span>
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+
+            <h2 style="margin-bottom: 30px; color: var(--neon-purple);">최신 게시글</h2>
             
             <% if (posts.length === 0) { %>
                 <p style="text-align: center; color: var(--text-secondary); margin-top: 50px;">아직 작성된 글이 없습니다.</p>
