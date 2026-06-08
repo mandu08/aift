@@ -53,11 +53,22 @@
 
             <% posts.forEach(post => { %>
                 <article class="post-card">
-                    <h2><a href="/post/<%= post.id %>"><%= post.title %></a></h2>
-                    <div class="post-meta">
-                        <span>작성자: <span style="color: var(--neon-blue);"><%= post.username %></span></span>
-                        <span style="margin: 0 10px;">|</span>
-                        <span><%= new Date(post.created_at).toLocaleDateString() %></span>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <h2 style="margin-bottom: 10px;"><a href="/post/<%= post.id %>"><%= post.title %></a></h2>
+                        <span style="background: var(--bg-color); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; color: var(--neon-pink); border: 1px solid var(--border-color);">
+                            ❤ <%= post.like_count || 0 %>
+                        </span>
+                    </div>
+                    <div class="post-meta" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span>작성자: <span style="color: var(--neon-blue);"><%= post.username %></span></span>
+                            <span style="margin: 0 10px;">|</span>
+                            <span><%= new Date(post.created_at).toLocaleDateString() %></span>
+                        </div>
+                        <div style="display: flex; gap: 15px; font-size: 0.85rem;">
+                            <span title="조회수">👁 <%= post.views || 0 %></span>
+                            <span title="댓글수" style="color: var(--neon-green);">💬 <%= post.comment_count || 0 %></span>
+                        </div>
                     </div>
                 </article>
             <% }) %>

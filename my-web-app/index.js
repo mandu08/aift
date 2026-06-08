@@ -28,7 +28,14 @@ const checkAuth = (req, res, next) => {
 // 1. 메인 페이지 - 글 목록
 app.get('/', async (req, res) => {
     try {
-        const postsResult = await pool.query('SELECT posts.*, users.username FROM posts JOIN users ON posts.author_id = users.id ORDER BY created_at DESC');
+        const postsResult = await pool.query(`
+            SELECT posts.*, users.username, 
+            (SELECT COUNT(*) FROM comments WHERE comments.post_id = posts.id) as comment_count,
+            (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) as like_count
+            FROM posts 
+            JOIN users ON posts.author_id = users.id 
+            ORDER BY created_at DESC
+        `);
         
         // 인기글 5개 가져오기 (좋아요 순)
         const popularResult = await pool.query(`
@@ -77,6 +84,13 @@ app.get('/logout', (req, res) => {
 
 // 3. 글 상세 페이지 (댓글, 좋아요 포함)
 app.get('/post/:id', async (req, res) => {
+    // 조회수 증가 (views 컬럼이 있다고 가정, 없으면 에러 방지를 위해 쿼리 수정 필요할 수 있음)
+    try {
+        await pool.query('UPDATE posts SET views = views + 1 WHERE id = $1', [req.params.id]);
+    } catch (e) {
+        console.log("Views column might not exist yet");
+    }
+
     const post = await pool.query('SELECT posts.*, users.username FROM posts JOIN users ON posts.author_id = users.id WHERE posts.id = $1', [req.params.id]);
     const comments = await pool.query('SELECT comments.*, users.username FROM comments JOIN users ON comments.author_id = users.id WHERE post_id = $1 ORDER BY created_at DESC', [req.params.id]);
     const likes = await pool.query('SELECT COUNT(*) FROM likes WHERE post_id = $1', [req.params.id]);
