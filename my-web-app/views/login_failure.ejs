@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 실패 - WANG BOARD</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .failure-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-top: 4px solid var(--neon-pink);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 123, 114, 0.1);
+            max-width: 450px;
+            margin: 50px auto;
+        }
+        .failure-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px rgba(255, 123, 114, 0.5));
+        }
+        .btn-retry {
+            background-color: var(--neon-pink);
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 123, 114, 0.4);
+        }
+        .btn-retry:hover {
+            box-shadow: 0 0 25px rgba(255, 123, 114, 0.6);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="logo">WANG BOARD</a>
+            <nav>
+                <a href="/login">로그인</a>
+                <a href="/signup">회원가입</a>
+            </nav>
+        </header>
+
+        <main>
+            <div class="failure-card">
+                <div class="failure-icon">🚫</div>
+                <h2 style="color: var(--neon-pink); margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span>로그인 실패</span>
+                </h2>
+                <p style="color: var(--text-primary); margin-bottom: 35px; font-size: 1.1rem; line-height: 1.6;">
+                    입력하신 아이디 또는 비밀번호가<br>
+                    일치하지 않습니다. 다시 시도해주세요.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <a href="/login" class="btn btn-retry" style="padding: 12px; font-weight: bold;">다시 로그인하기</a>
+                    <a href="/signup" class="btn btn-outline" style="padding: 12px;">아직 회원이 아니신가요?</a>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
