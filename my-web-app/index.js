@@ -84,11 +84,11 @@ app.get('/logout', (req, res) => {
 
 // 3. 글 상세 페이지 (댓글, 좋아요 포함)
 app.get('/post/:id', async (req, res) => {
-    // 조회수 증가 (views 컬럼이 있다고 가정, 없으면 에러 방지를 위해 쿼리 수정 필요할 수 있음)
+    // 조회수 증가 (views 컬럼이 없을 경우를 대비해 COALESCE 사용 및 에러 처리 개선)
     try {
-        await pool.query('UPDATE posts SET views = views + 1 WHERE id = $1', [req.params.id]);
+        await pool.query('UPDATE posts SET views = COALESCE(views, 0) + 1 WHERE id = $1', [req.params.id]);
     } catch (e) {
-        console.log("Views column might not exist yet");
+        console.error("조회수 업데이트 실패 (컬럼이 없을 수 있습니다):", e.message);
     }
 
     const post = await pool.query('SELECT posts.*, users.username FROM posts JOIN users ON posts.author_id = users.id WHERE posts.id = $1', [req.params.id]);
