@@ -39,11 +39,9 @@ app.get('/', async (req, res) => {
         
         // 인기글 5개 가져오기 (좋아요 순)
         const popularResult = await pool.query(`
-            SELECT posts.id, posts.title, COUNT(likes.id) as like_count 
-            FROM posts 
-            LEFT JOIN likes ON posts.id = likes.post_id 
-            GROUP BY posts.id 
-            ORDER BY like_count DESC, created_at DESC 
+            SELECT posts.id, posts.title, posts.views as like_count
+            FROM posts
+            ORDER BY views DESC, created_at DESC 
             LIMIT 5
         `);
 
